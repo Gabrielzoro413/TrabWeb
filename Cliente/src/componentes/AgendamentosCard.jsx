@@ -1,36 +1,20 @@
-function AgendamentosCard({ service, setUpdateService,deleteService, showInfo }) {
-
-  const formattedDate = new Date(service.date).toLocaleDateString("pt-BR");
-
-  const formattedInTime = service.in_time?.slice(0, 5);
-
-  const formattedOutTime = service.out_time?.slice(0, 5);
+function AgendamentosCard({ item }) {
+  const borderColors = {
+    Solicitado: "border-yellow-500",
+    Confirmado: "border-green-500",
+    Concluido: "border-cyan-500",
+    Cancelado: "border-red-500"
+  };
 
   return (
-    <div className="flex flex-row justify-between items-center bg-blue-800 text-white text-[.7rem] rounded-xl px-6 py-2">
-      <div className="flex flex-col font-normal gap-1">
-        <span>Data: {formattedDate}</span>
-        <span>Categoria: {service.category}</span>
-        <div className="flex flex-row gap-6">
-          <span>Entrada: {formattedInTime}</span>
-          <span>Saída: {formattedOutTime}</span>
-        </div>
-        <span>Alunos: {service.served.length}</span>
-      </div>
-      {setUpdateService && deleteService ? (
-        <div className="flex flex-col gap-6">
-          <div onClick={() => setUpdateService(service.id)}>
-            <i className="pi pi-file-edit text-white text-base cursor-pointer"></i>
-          </div>
-          <div onClick={() => deleteService(service.id)}>
-            <i className="pi pi-trash text-white text-base cursor-pointer"></i>
-          </div>
-        </div>
-      ) : (
-        <div onClick={() => showInfo(service.id)}>
-          <i className="pi pi-info-circle text-white text-base cursor-pointer"></i>
-        </div>
-      )}
+    <div
+      className={`border-2 rounded-xl p-4 mb-4 ${
+        borderColors[item.status] || "border-gray-300"
+      }`}
+    >
+      <p><strong>Especialidade:</strong> {item.especialidade}</p>
+      <p><strong>Data:</strong> {item.data}</p>
+      <p><strong>Status:</strong> {item.status}</p>
     </div>
   );
 }

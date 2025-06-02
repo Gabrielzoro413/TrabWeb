@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "especialidade": "Cardiologia",
+    "data": "10/06/2025 14:00",
+    "status": "Solicitado"
+  },
+  {
+    "id": 2,
+    "especialidade": "Dermatologia",
+    "data": "12/06/2025 09:30",
+    "status": "Confirmado"
+  },
+  {
+    "id": 3,
+    "especialidade": "Neurologia",
+    "data": "15/06/2025 16:00",
+    "status": "Concluido"
+  },
+  {
+    "id": 4,
+    "especialidade": "Ortopedia",
+    "data": "20/06/2025 11:00",
+    "status": "Cancelado"
+  }
+]
