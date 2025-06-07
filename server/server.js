@@ -26,7 +26,9 @@ app.use(cors());
 app.use(express.json());
 
 
-// // Rotas
+// // // // Rotas
+ const userRoutes = require('./routes/userroutes');
+ app.use('/users', userRoutes);
 // app.use('/usuarios', usuarioRoutes);
 // app.use('/grupos', grupoRoutes);
 // app.use('/imoveis', imovelRoutes);
