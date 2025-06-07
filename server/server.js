@@ -4,38 +4,20 @@ const cors = require('cors');
 const dotenv = require('dotenv'); 
 const {connectDB} = require('./config/database'); 
 // const usuarioRoutes = require('./routes/usuarioRoutes');
-// const grupoRoutes = require('./routes/grupoRoutes');
-// const imovelRoutes = require('./routes/imovelRoutes');
-// const contratoRoutes = require('./routes/contratoRoutes');
-// const pagamentoRoutes = require('./routes/pagamentoRoutes');
 // const autenticacaoRoutes = require('./routes/autenticacaoRoutes');
 // const autenticarToken = require('./middlewares/autenticarToken');
-
-
-
 
 dotenv.config();
 
 const app = express();
 
-
-
-
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-
-// // // // Rotas
- const userRoutes = require('./routes/userroutes');
- app.use('/users', userRoutes);
+ // Rotas
 // app.use('/usuarios', usuarioRoutes);
-// app.use('/grupos', grupoRoutes);
-// app.use('/imoveis', imovelRoutes);
-// app.use('/contratos', contratoRoutes);
 // app.use('/pagamentos', pagamentoRoutes);
 // app.use('/login', autenticacaoRoutes);
-
 // Rota protegida — requer autenticação por token
 // app.get('/verificar-token', autenticarToken, (req, res) => {
 //     res.json({
@@ -43,7 +25,6 @@ app.use(express.json());
 //         mensagem: 'Token válido'
 //     });
 // });
-// app.use('/api/users', require('./routes/userRoutes'));
 
 // Rota raiz
 app.get('/', (req, res) => {
