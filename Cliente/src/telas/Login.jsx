@@ -2,35 +2,89 @@ import Butao from "../componentes/Botao";
 import InputBox from "../componentes/InputBox";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import authService from "../services/auth.js";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Login() {
+  const [loading, setLoading] = useState(false);
   const [credentials, setCredentials] = useState({
     cpf: "",
     senha: "",
   });
-
-  const [errorMessage, setErrorMessage] = useState(""); // estado para mensagem de erro
+  
   const navigate = useNavigate();
 
-  const changeInfo = (key) => (e) => {
-    setCredentials((prev) => ({
-      ...prev,
-      [key]: e.target.value,
-    }));
-  };
 
-  const handleLogin = () => {
-  // Aqui você pode colocar lógica de autenticação depois, se quiser
-  navigate("/layout/agendamentos");
+function formatarCPF(valor) {
+  return valor
+    .replace(/\D/g, '')              // Remove tudo que não é dígito
+    .replace(/(\d{3})(\d)/, '$1.$2') 
+    .replace(/(\d{3})(\d)/, '$1.$2') 
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+    .slice(0, 14); // Máximo de 14 com máscara
+}
+
+const changeInfo = (key) => (e) => {
+  let value = e.target.value;
+  if (key === "cpf") {
+    value = formatarCPF(value); // aplica máscara ao CPF
+  }
+  setCredentials((prev) => ({
+    ...prev,
+    [key]: value,
+  }));
+};
+  const handleLogin =  async () => {
+    
+    const cpfLimpo = credentials.cpf.replace(/\D/g, '');
+    
+    if (cpfLimpo.length !== 11) {
+       toast.error("CPF inválido.");
+        return;
+      }
+
+    try {
+      
+    setLoading(true);
+    const response = await authService.login({
+      cpf: cpfLimpo,
+      senha: credentials.senha
+    });
+
+    localStorage.setItem('token', response.data.token); 
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    navigate("/layout/agendamentos");
+
+    } catch (error) {
+      if (error.response?.data?.erro) {
+      toast.error(error.response.data.erro);
+      } else {
+      toast.error("Erro ao tentar fazer login.");
+}
+    }finally {
+    setLoading(false);
+  }
 };
 
 return (
   
   <div className="flex h-screen w-full  items-center justify-center">
-        <div className="flex w-[900px] h-[470px]  rounded-lg overflow-hidden shadow-lg-[0 8px 30px rgba(141, 130, 130, 0.7)]" >
+        <div className="flex w-[900px] h-[470px]  rounded-lg overflow-hidden " style={{ boxShadow: " 20px 20px rgba(141, 130, 130, 0.7)" }}
+ >
   
           {/* Esquerda - Formulário */}
-          <div className="w-1/2 bg-white p-10 flex flex-col justify-center">
-  
+          <div className="w-1/2 bg-white p-10 flex flex-col justify-center"> 
+          
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
              {/* Logo + Texto (com margin-top) */}
              <div className=" mb-5 text-center flex flex-col items-center">
               <img
@@ -44,8 +98,9 @@ return (
             </div>
   
             {/* Formulario */}
-            
-            <InputBox label={"CPF"} onChange={changeInfo("cpf")} />
+
+            <InputBox label={"CPF"} onChange={changeInfo("cpf")} value={credentials.cpf} />
+
             <InputBox label={"Senha"} type="password" onChange={changeInfo("senha")} />
             
             < Link className="text-sm text-blue-600 hover:underline mb-2 self-end" 
@@ -53,7 +108,8 @@ return (
               Esqueceu sua senha?
             </Link>
              <div onClick={handleLogin} >
-              <Butao  text="Acessar" />
+              <Butao text={loading ? "Aguarde..." : "Acessar"} disabled={loading} />
+
             </div>
 
   <p className="text-sm text-[#212529] mt-2 text-center"> 

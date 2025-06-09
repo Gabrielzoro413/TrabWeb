@@ -23,10 +23,14 @@ function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
+const handleLogout = () => {
+  const confirmar = window.confirm("Tem certeza que deseja sair?");
+  if (confirmar) {
+    localStorage.clear(); // ou removeItem individualmente
     navigate("/");
-  };
+  }
+};
+
 
   const handleMeusDados = () => {
     navigate("/layout/perfil");
