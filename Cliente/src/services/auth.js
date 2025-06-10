@@ -14,14 +14,14 @@ const removerUser = async (credentials) => {
     Authorization: `Bearer ${credentials}`,
   },
    }) } ;
-   
-const atualizarUser = async (credentials) => {
-  return api.put("/users/atualizar",{
-  headers: {
-    Authorization: `Bearer ${credentials}`,
-  },
-   }) } ;
-   
+   const atualizarUser = async (credentials, payload) => {
+  return api.put("/users/atualizar", payload, {
+    headers: {
+      Authorization: `Bearer ${credentials}`,
+    },
+  });
+};
+
 const buscarPorId =  async (credentials) => {
   return api.get("/users/perfil",{
   headers: {

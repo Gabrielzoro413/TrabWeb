@@ -26,6 +26,7 @@ function PerfilEditar() {
         
         const response = await authService.buscarPorId(user);
         setUserData(response.data.usuario);
+        
         setFormData({
           nome: response.data.usuario.nome || "",
           cpf: response.data.usuario.cpf || "",
@@ -117,13 +118,17 @@ function validarCampos(dados) {
 
     try {
       
+        const token = localStorage.getItem("token");
+        if (!token) return; 
+
       const payload = {
+        user,
   ...formData,
   cpf: formData.cpf.replace(/\D/g, ''),
   telefone: formData.telefone.replace(/\D/g, ''),
 };
 
-      await authService.atualizarUser(payload);
+      await authService.atualizarUser(token,payload);
       toast.success("Perfil atualizado com sucesso.");
       
           // Espera 2 segundos antes de navegar (tempo do toast)
